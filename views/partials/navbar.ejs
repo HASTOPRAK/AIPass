@@ -12,6 +12,10 @@
         <a class="btn btn-ghost nav-link <%= active.startsWith('/pricing') ? 'is-active' : '' %>" href="/pricing">Pricing</a>
         <a class="btn btn-ghost nav-link <%= (active.startsWith('/me') || active.startsWith('/owner') || active.startsWith('/admin')) ? 'is-active' : '' %>"
         href="<%= profilePath %>">Profile</a>
+        <span class="pill">
+        <strong><%= user.name %></strong>
+        <span class="muted" style="margin-left:6px;"><%= user.role %></span>
+        </span>
         <span class="pill">Credits: <strong><%= user.credits %></strong></span>
         <form method="POST" action="/logout" style="display:inline;">
           <button class="btn btn-ghost" type="submit">Logout</button>
