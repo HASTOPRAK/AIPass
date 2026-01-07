@@ -234,18 +234,18 @@ app.post("/register", requireGuest, async (req, res) => {
         const nextUrl = safeNext(req.body.next);
         
         if (!name || !email || !password) {
-            return res.status(400).render("register", { error: "All fields are required." });
+            return res.status(400).render("register", { error: "All fields are required.", next: req.query.next || "/app" });
         }
         if (!["INDIVIDUAL", "OWNER"].includes(role)) {
-            return res.status(400).render("register", { error: "Invalid account type selected." });
+            return res.status(400).render("register", { error: "Invalid account type selected.", next: req.query.next || "/app" });
         }
         if (password.length < 8) {
-            return res.status(400).render("register", { error: "Password must be at least 8 characters long." });
+            return res.status(400).render("register", { error: "Password must be at least 8 characters long.", next: req.query.next || "/app" });
         }
 
         const existing = await findUserByEmail(email);
         if (existing) {
-            return res.status(400).render("register", { error: "Email is already registered." });
+            return res.status(400).render("register", { error: "Email is already registered.", next: req.query.next || "/app" });
         }
 
         const passwordHash = await bcrypt.hash(password, 12);
@@ -255,7 +255,7 @@ app.post("/register", requireGuest, async (req, res) => {
         res.redirect(nextUrl);
     } catch (err) {
         console.error("Registration error:", err);
-        res.status(500).render("register", { error: "An error occurred. Please try again." });
+        res.status(500).render("register", { error: "An error occurred. Please try again.", next: req.query.next || "/app"  });
     }
 });
 
@@ -267,19 +267,19 @@ app.post("/login", requireGuest, async (req, res) => {
 
         const user = await findUserByEmail(email);
         if (!user || !user.password_hash) {
-            return res.status(401).render("login", { error: "Invalid email or password." });
+            return res.status(401).render("login", { error: "Invalid email or password.", next: req.query.next || "/app" });
         }
 
         const ok = await bcrypt.compare(password, user.password_hash);
         if (!ok) {
-            return res.status(401).render("login", { error: "Invalid email or password." });
+            return res.status(401).render("login", { error: "Invalid email or password.", next: req.query.next || "/app" });
         }
 
         req.session.userId = user.id;
         res.redirect(nextUrl);
     } catch (err) {
         console.error("Login error:", err);
-        res.status(500).render("login", { error: "An error occurred. Please try again." });
+        res.status(500).render("login", { error: "An error occurred. Please try again.", next: req.query.next || "/app" });
     }
 });
 
@@ -545,5 +545,5 @@ app.get("/health", (req, res) => res.json({ ok: true }));
 
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
