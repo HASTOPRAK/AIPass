@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("partials/head", { title: "Welcome to • " + appName }) %>
+</head>
+<body>
+
+    <%- include("partials/navbar", { homeHref: "/" }) %>
+
+  <main class="container">
+    <section class="hero fade-in">
+      <div class="hero-grid">
+        <div>
+          <div class="kbd">Centralized access • Credit-based usage • Role-based accounts</div>
+          <h1 class="h1">All your AI tools, one pass.</h1>
+          <p class="sub">
+            AI Pass is a clean platform for individuals and businesses to run practical AI tools
+            with a simple credit system and usage tracking.
+          </p>
+
+          <div class="split" style="margin-top:16px;">
+            <a class="btn btn-primary" href="/register">Create account</a>
+            <a class="btn" href="/login">I already have one</a>
+          </div>
+
+          <p class="small" style="margin-top:14px;">
+            Tip: try the Summarizer tool first. It's fast and shows credit usage instantly.
+          </p>
+        </div>
+
+        <div class="card card-pad fade-in">
+          <h2 class="h2">What you get</h2>
+
+          <div class="grid-3" style="margin-top:14px;">
+            <div class="card-soft card-pad">
+              <div class="h2">Tools</div>
+              <div class="muted">Summarize, write emails, generate copy.</div>
+            </div>
+            <div class="card-soft card-pad">
+              <div class="h2">Credits</div>
+              <div class="muted">Spend per run. No messy pricing pages.</div>
+            </div>
+            <div class="card-soft card-pad">
+              <div class="h2">Logs</div>
+              <div class="muted">Track usage. Even failed runs get recorded.</div>
+            </div>
+          </div>
+
+          <hr class="hr" />
+
+          <div class="muted small">
+            Built with Node.js, PostgreSQL, EJS, and Gemini.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="card card-pad">
+        <h2 class="h2">Ready?</h2>
+        <p class="muted">Create an account and jump into the dashboard.</p>
+        <div class="split">
+          <a class="btn btn-primary" href="/register">Get started</a>
+          <a class="btn btn-ghost" href="/login">Login</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="container footer">
+    © <%= new Date().getFullYear() %> <%= appName %>
+  </footer>
+</body>
+</html>

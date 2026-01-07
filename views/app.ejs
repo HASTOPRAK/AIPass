@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("partials/head", { title: "Welcome • " + appName }) %>
+</head>
+<body data-has-error="<%= error ? 1 : 0 %>">
+
+    <%- include("partials/navbar", { homeHref: "/" }) %>
+
+
+  <main class="container section fade-in">
+    <div style="display:grid; gap:16px;">
+      <div class="card card-pad">
+        <h2 class="h2">Tools</h2>
+        <p class="muted" style="margin-top:0;">Pick a tool. Each run costs credits.</p>
+
+        <div class="grid-2" style="margin-top:14px;">
+          <% tools.forEach(t => { %>
+            <div class="card-soft card-pad">
+              <div class="h2"><%= t.name %></div>
+              <div class="muted"><%= t.description %></div>
+              <div class="small" style="margin-top:10px;">Cost: <strong><%= t.cost %></strong> credits</div>
+              <div style="margin-top:12px;">
+                <a class="btn btn-primary" href="/tools/<%= t.key %>">Open</a>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+
+      <% if (user?.credits <= 10) { %>
+            <div class="error" style="margin-bottom:14px;">
+            Heads up: you're running low on credits (<%= user.credits %>).
+            </div>
+        <% } %>
+
+
+      <div class="card card-pad">
+        <h2 class="h2">Recent usage</h2>
+        <p class="muted" style="margin-top:0;">Latest runs, including failures.</p>
+
+        <% if (!usage || usage.length === 0) { %>
+          <div class="card-soft card-pad muted">No usage yet.</div>
+        <% } else { %>
+          <table class="table" style="margin-top:14px;">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Tool</th>
+                <th>Credits</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% usage.forEach(u => { %>
+                <tr>
+                  <td><%= u.created_at.toISOString().slice(0, 19).replace("T", " ") %></td>
+                  <td><%= u.tool_key %></td>
+                  <td><%= u.credits_charged %></td>
+                  <td>
+                    <% if (u.status === "SUCCESS") { %>
+                      <span class="badge badge-ok">SUCCESS</span>
+                    <% } else { %>
+                      <span class="badge badge-bad">FAILED</span>
+                    <% } %>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        <% } %>
+      </div>
+    </div>
+  </main>
+
+  <footer class="container footer">
+    © <%= new Date().getFullYear() %> <%= appName %>
+  </footer>
+</body>
+</html>

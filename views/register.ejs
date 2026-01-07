@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("partials/head", { title: "Register • " + appName }) %>
+</head>
+<body data-has-error="<%= error ? 1 : 0 %>">
+
+    <%- include("partials/navbar", { homeHref: "/" }) %>
+
+  <main class="container section fade-in" style="max-width:560px;">
+    <div class="card card-pad">
+      <h1 class="h1" style="font-size:34px;">Create your account</h1>
+      <p class="sub">Choose your role and start using tools with credits.</p>
+
+      <% if (error) { %>
+        <div class="error"><%= error %></div>
+      <% } %>
+
+      <form class="form" method="POST" action="/register">
+        <div>
+          <div class="label">Name</div>
+          <input class="input" name="name" type="text" autocomplete="name" required />
+        </div>
+
+        <div>
+          <div class="label">Email</div>
+          <input class="input" name="email" type="email" autocomplete="email" required />
+        </div>
+
+        <div>
+          <div class="label">Password</div>
+          <input class="input" name="password" type="password" autocomplete="new-password" required />
+          <div class="small" style="margin-top:6px;">Minimum 8 characters.</div>
+        </div>
+
+        <input type="hidden" name="next" value="<%= next %>">
+
+
+        <div>
+          <div class="label">Account type</div>
+          <select class="select" name="role" required>
+            <option value="INDIVIDUAL">Individual</option>
+            <option value="OWNER">Company Owner</option>
+          </select>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Create account</button>
+      </form>
+    </div>
+  </main>
+</body>
+</html>

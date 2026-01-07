@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("partials/head", { title: "ADMIN • " + appName }) %>
+</head>
+<body>
+
+    <%- include("partials/navbar", { homeHref: "/" }) %>
+
+  <main class="container section fade-in">
+    <div class="card card-pad">
+      <%- include("partials/page_icon", { heading: "Welcome back", subheading: "See platform overview" }) %>
+      <div class="grid-3" style="margin-top:14px;">
+        <div class="card-soft card-pad"><div class="h2">Users</div><div class="muted"><%= stats.users %></div></div>
+        <div class="card-soft card-pad"><div class="h2">Organizations</div><div class="muted"><%= stats.orgs %></div></div>
+        <div class="card-soft card-pad"><div class="h2">Usage logs</div><div class="muted"><%= stats.usageLogs %></div></div>
+      </div>
+
+      <hr class="hr" />
+
+<h2 class="h2">Assign user to company</h2>
+
+<% if (message) { %><div class="success" style="margin-top:14px;"><%= message %></div><% } %>
+<% if (error) { %><div class="error" style="margin-top:14px;"><%= error %></div><% } %>
+
+<form class="form" method="POST" action="/admin/assign" style="max-width:700px;">
+  <div>
+    <div class="label">User</div>
+    <select class="select" name="userId" required>
+      <% users.forEach(u => { %>
+        <option value="<%= u.id %>"><%= u.email %> — <%= u.role %> — credits: <%= u.credits %></option>
+      <% }) %>
+    </select>
+  </div>
+
+  <div>
+    <div class="label">Company</div>
+    <select class="select" name="orgId" required>
+      <% orgs.forEach(o => { %>
+        <option value="<%= o.id %>"><%= o.name %> (Owner: <%= o.owner_email %>)</option>
+      <% }) %>
+    </select>
+  </div>
+
+  <button class="btn btn-primary" type="submit"><span class="btn-text">Assign</span></button>
+</form>
+
+<form class="form" method="POST" action="/admin/unassign" style="max-width:700px; margin-top:10px;">
+  <div>
+    <div class="label">Remove user from any company</div>
+    <select class="select" name="userId" required>
+      <% users.forEach(u => { %>
+        <option value="<%= u.id %>"><%= u.email %> — org: <%= u.org_id ? "Yes" : "-" %></option>
+      <% }) %>
+    </select>
+  </div>
+  <button class="btn btn-ghost" type="submit"><span class="btn-text">Unassign</span></button>
+</form>
+
+
+      <hr class="hr" />
+
+      <h2 class="h2">Recent usage</h2>
+      <table class="table" style="margin-top:14px;">
+        <thead>
+          <tr><th>Time</th><th>User</th><th>Role</th><th>Tool</th><th>Credits</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <% recentUsage.forEach(r => { %>
+            <tr>
+              <td><%= r.created_at.toISOString().slice(0,19).replace("T"," ") %></td>
+              <td><%= r.email %></td>
+              <td><%= r.role %></td>
+              <td><%= r.tool_key %></td>
+              <td><%= r.credits_charged %></td>
+              <td>
+                <% if (r.status === "SUCCESS") { %>
+                  <span class="badge badge-ok">SUCCESS</span>
+                <% } else { %>
+                  <span class="badge badge-bad">FAILED</span>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+
+      <hr class="hr" />
+
+      <h2 class="h2">Users (latest)</h2>
+      <table class="table" style="margin-top:14px;">
+        <thead>
+          <tr><th>Email</th><th>Role</th><th>Credits</th><th>Org</th></tr>
+        </thead>
+        <tbody>
+          <% users.forEach(u => { %>
+            <tr>
+              <td><%= u.email %></td>
+              <td><%= u.role %></td>
+              <td><%= u.credits %></td>
+              <td><%= u.org_id ? u.org_id : "Not Assigned" %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

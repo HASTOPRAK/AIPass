@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("partials/head", { title: "Pricing • " + appName }) %>
+</head>
+<body data-has-error="<%= error ? 1 : 0 %>">
+
+    <%- include("partials/navbar", { homeHref: "/" }) %>
+
+  <main class="container section fade-in">
+    <div class="card card-pad">
+      <div class="split" style="justify-content:space-between; align-items:flex-start;">
+        <div>
+          <h1 class="h1" style="font-size:36px;">Pricing</h1>
+          <p class="sub" style="margin-top:6px;">
+            Choose a package to top up credits. Your credits are used per tool run.
+          </p>
+          <div class="kbd" style="margin-top:10px;">
+            Tip: Owners can buy larger packages and transfer credits to employees.
+          </div>
+        </div>
+      </div>
+
+      <% if (message) { %>
+        <div class="success" style="margin-top:14px;"><%= message %></div>
+        <script>
+            window.addEventListener("DOMContentLoaded", function () {
+                if (window.AIPassToast) {
+                    window.AIPassToast({
+                    type: "success",
+                    title: "Payment complete",
+                    message: "<%- JSON.stringify(message) %>",
+                    });
+                }
+                });
+        </script>
+        <% } %>
+
+      <% if (error) { %>
+        <div class="error" style="margin-top:14px;"><%= error %></div>
+      <% } %>
+
+      <hr class="hr" />
+
+      <h2 class="h2">Individual plans</h2>
+      <p class="muted" style="margin-top:0;">Best for personal use and employees.</p>
+
+      <div class="grid-3" style="margin-top:14px;">
+        <% packages.individual.forEach(p => { %>
+          <div class="card-soft card-pad">
+            <div class="split" style="justify-content:space-between; align-items:flex-start;">
+              <div>
+                <div class="h2"><%= p.name %></div>
+                <div class="muted"><%= p.credits %> credits</div>
+              </div>
+              <span class="badge"><%= p.priceLabel %></span>
+            </div>
+
+            <div class="small" style="margin-top:10px;">
+              Good for quick tasks and light daily usage.
+            </div>
+
+            <div style="margin-top:14px;">
+              <a class="btn btn-primary" href="/checkout/<%= p.key %>">
+                <span class="btn-text">Buy</span>
+              </a>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+
+      <hr class="hr" />
+
+      <h2 class="h2">Business plans</h2>
+      <p class="muted" style="margin-top:0;">
+        Bigger credit packs (discounted per credit). Intended for <strong>owners</strong>.
+      </p>
+
+      <div class="grid-3" style="margin-top:14px;">
+        <% packages.business.forEach(p => { %>
+          <div class="card-soft card-pad">
+            <div class="split" style="justify-content:space-between; align-items:flex-start;">
+              <div>
+                <div class="h2"><%= p.name %></div>
+                <div class="muted"><%= p.credits %> credits</div>
+              </div>
+              <span class="badge"><%= p.priceLabel %></span>
+            </div>
+
+            <div class="small" style="margin-top:10px;">
+              Best for teams. Owners can transfer credits to employees.
+            </div>
+
+            <% if (user?.role === "OWNER" || user?.role === "ADMIN") { %>
+              <div style="margin-top:14px;">
+                <a class="btn btn-primary" href="/checkout/<%= p.key %>">
+                  <span class="btn-text">Buy</span>
+                </a>
+              </div>
+            <% } else { %>
+              <div style="margin-top:14px;">
+                <button class="btn" disabled title="Business plans are available for owners.">
+                  Owner-only
+                </button>
+              </div>
+              <div class="small" style="margin-top:10px;">
+                This plan is available for company owners.
+              </div>
+            <% } %>
+          </div>
+        <% }) %>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="container footer">
+    © <%= new Date().getFullYear() %> <%= appName %>
+  </footer>
+</body>
+</html>

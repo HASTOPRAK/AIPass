@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("partials/head", { title: "User • " + appName }) %>
+</head>
+<body>
+
+    <%- include("partials/navbar", { homeHref: "/" }) %>
+
+  <main class="container section fade-in">
+    <div class="card card-pad">
+      <%- include("partials/page_icon", { heading: "Welcome back", subheading: "Your usage history" }) %>
+      <p class="muted" style="margin-top:0;">Everything you run (including failures) shows up here.</p>
+
+      <% if (!usage || usage.length === 0) { %>
+        <div class="card-soft card-pad muted">No usage yet.</div>
+      <% } else { %>
+        <table class="table" style="margin-top:14px;">
+          <thead>
+            <tr><th>Time</th><th>Tool</th><th>Credits</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <% usage.forEach(u => { %>
+              <tr>
+                <td><%= u.created_at.toISOString().slice(0,19).replace("T"," ") %></td>
+                <td><%= u.tool_key %></td>
+                <td><%= u.credits_charged %></td>
+                <td>
+                  <% if (u.status === "SUCCESS") { %>
+                    <span class="badge badge-ok">SUCCESS</span>
+                  <% } else { %>
+                    <span class="badge badge-bad">FAILED</span>
+                  <% } %>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } %>
+    </div>
+  </main>
+</body>
+</html>

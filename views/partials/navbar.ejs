@@ -1,0 +1,26 @@
+<header class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="<%= homeHref || '/app' %>">
+      <img class="brand-icon" src="/assets/icons/icon-192.png" alt="<%= appName %>" />
+      <span><%= appName %></span>
+    </a>
+    <% const active = navActive || ""; %>
+
+    <div class="nav-actions">
+      <% if (user) { %>
+        <a class="btn btn-ghost nav-link <%= active.startsWith('/app') || active.startsWith('/tools') ? 'is-active' : '' %>" href="/app">Tools</a>
+        <a class="btn btn-ghost nav-link <%= active.startsWith('/pricing') ? 'is-active' : '' %>" href="/pricing">Pricing</a>
+        <a class="btn btn-ghost nav-link <%= (active.startsWith('/me') || active.startsWith('/owner') || active.startsWith('/admin')) ? 'is-active' : '' %>"
+        href="<%= profilePath %>">Profile</a>
+        <span class="pill">Credits: <strong><%= user.credits %></strong></span>
+        <form method="POST" action="/logout" style="display:inline;">
+          <button class="btn btn-ghost" type="submit">Logout</button>
+        </form>
+      <% } else { %>
+        <a class="btn btn-ghost" href="/pricing">Pricing</a>
+        <a class="btn btn-ghost" href="/login">Login</a>
+        <a class="btn btn-primary" href="/register">Get started</a>
+      <% } %>
+    </div>
+  </div>
+</header>

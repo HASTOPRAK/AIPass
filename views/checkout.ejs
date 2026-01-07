@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("partials/head", { title: "Checkout • " + appName }) %>
+</head>
+<body>
+
+    <%- include("partials/navbar", { homeHref: "/" }) %>
+
+  <main class="container section fade-in" style="max-width:820px;">
+    <div class="card card-pad">
+      <div class="split" style="justify-content:space-between; align-items:flex-start;">
+        <div>
+          <h1 class="h1" style="font-size:34px;">Checkout</h1>
+          <p class="sub" style="margin-top:6px;">
+            You're purchasing <strong><%= pkg.name %></strong> — <strong><%= pkg.credits %></strong> credits.
+          </p>
+        </div>
+        <span class="badge"><%= pkg.priceLabel %></span>
+      </div>
+
+      <hr class="hr" />
+
+      <div class="card-soft card-pad">
+        <div class="h2">Payment details</div>
+
+        <form id="payForm" class="form" method="POST" action="/checkout/<%= pkg.key %>/complete">
+          <div class="grid-3">
+            <div style="grid-column: span 2;">
+              <div class="label">Card number</div>
+              <input class="input" value="4242 4242 4242 4242" disabled />
+            </div>
+            <div>
+              <div class="label">CVV</div>
+              <input class="input" value="123" disabled />
+            </div>
+          </div>
+
+          <div class="grid-3">
+            <div>
+              <div class="label">Expiry</div>
+              <input class="input" value="12 / 30" disabled />
+            </div>
+            <div style="grid-column: span 2;">
+              <div class="label">Name on card</div>
+              <input class="input" value="<%= user?.name %>" disabled />
+            </div>
+          </div>
+
+          <div class="split" style="margin-top:6px; align-items:center;">
+            <div id="micro" class="status" style="display:none;">
+              <span>⚡</span>
+              <span id="microText">Charging credits…</span>
+            </div>
+          </div>
+
+          <button id="payBtn" class="btn btn-primary" type="submit">
+            <span class="btn-text">Pay <%= pkg.priceLabel %></span>
+          </button>
+
+          <div class="small" style="margin-top:10px;">
+            Clicking pay will simulate processing for ~1.2 seconds, then complete.
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Fake delay on pay button
+    const form = document.getElementById("payForm");
+    const btn = document.getElementById("payBtn");
+    const micro = document.getElementById("micro");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      btn.disabled = true;
+      btn.classList.add("is-loading");
+      const t = btn.querySelector(".btn-text");
+      if (t) t.textContent = "Processing…";
+
+      micro.style.display = "inline-flex";
+      window.AIPassToast?.({ type: "info", title: "Processing", message: "Simulating payment…" });
+
+      setTimeout(() => {
+        form.submit();
+      }, 1200);
+    });
+  </script>
+</body>
+</html>

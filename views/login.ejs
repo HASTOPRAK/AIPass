@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("partials/head", { title: "Login • " + appName }) %>
+</head>
+<body data-has-error="<%= error ? 1 : 0 %>">
+
+    <%- include("partials/navbar", { homeHref: "/" }) %>
+
+  <main class="container section fade-in" style="max-width:560px;">
+    <div class="card card-pad">
+      <h1 class="h1" style="font-size:34px;">Welcome back</h1>
+      <p class="sub">Login to continue to your dashboard.</p>
+
+      <% if (error) { %>
+        <div class="error"><%= error %></div>
+      <% } %>
+
+      <form class="form" method="POST" action="/login">
+        <div>
+          <div class="label">Email</div>
+          <input class="input" name="email" type="email" autocomplete="email" required />
+        </div>
+
+        <div>
+          <div class="label">Password</div>
+          <input class="input" name="password" type="password" autocomplete="current-password" required />
+        </div>
+
+        <input type="hidden" name="next" value="<%= next %>">
+
+
+        <button class="btn btn-primary" type="submit">Login</button>
+      </form>
+
+      <hr class="hr" />
+
+      <a class="btn btn-ghost" href="/auth/google">Continue with Google</a>
+
+      <p class="small" style="margin-top:12px;">
+        No account? <a href="/register" style="text-decoration:underline;">Create one</a>.
+      </p>
+    </div>
+  </main>
+</body>
+</html>

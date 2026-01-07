@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("partials/head", { title: "Business • " + appName }) %>
+</head>
+<body>
+
+    <%- include("partials/navbar", { homeHref: "/" }) %>
+
+  <main class="container section fade-in">
+    <div>
+      <div class="card card-pad">
+        <%- include("partials/page_icon", { heading: "Welcome back", subheading: "See your organization" }) %>
+        <p class="muted" style="margin-top:0;">Manage employees and their credits.</p>
+        <div class="status"><span>🏢</span><span><strong><%= org.name %></strong></span></div>
+
+        <% if (message) { %><div class="success" style="margin-top:14px;"><%= message %></div><% } %>
+        <% if (error) { %><div class="error" style="margin-top:14px;"><%= error %></div><% } %>
+
+        <hr class="hr" />
+
+        <h2 class="h2">Employees</h2>
+        <form class="form" method="POST" action="/owner/add-by-email" style="max-width:520px; margin-top:14px;">
+        <div>
+            <div class="label">Add employee by email</div>
+            <input class="input" name="email" type="email" placeholder="employee@email.com" required />
+            <div class="small" style="margin-top:6px;">The user must already exist and be an INDIVIDUAL.</div>
+        </div>
+        <button class="btn btn-primary" type="submit"><span class="btn-text">Add to company</span></button>
+        </form>
+
+        <hr class="hr" />
+
+        <h2 class="h2">Transfer credits to employee</h2>
+        <form class="form" method="POST" action="/owner/transfer" style="max-width:700px;">
+        <div>
+            <div class="label">Employee</div>
+            <select class="select" name="employeeId" required>
+            <% employees.forEach(e => { %>
+                <option value="<%= e.id %>"><%= e.email %> (credits: <%= e.credits %>)</option>
+            <% }) %>
+            </select>
+        </div>
+
+        <div>
+            <div class="label">Amount</div>
+            <input class="input" type="number" name="amount" min="1" step="1" placeholder="100" required />
+            <div class="small" style="margin-top:6px;">This subtracts from your credits and adds to the employee.</div>
+        </div>
+
+        <button class="btn btn-primary" type="submit"><span class="btn-text">Transfer</span></button>
+        </form>
+
+        <hr class="hr" />
+
+        <% if (!employees || employees.length === 0) { %>
+          <div class="card-soft card-pad muted">No employees yet.</div>
+        <% } else { %>
+          <table class="table" style="margin-top:14px;">
+            <thead>
+              <tr><th>Name</th><th>Email</th><th>Credits</th></tr>
+            </thead>
+            <tbody>
+              <% employees.forEach(e => { %>
+                <tr>
+                  <td><%= e.name %></td>
+                  <td><%= e.email %></td>
+                  <td><%= e.credits %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        <% } %>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

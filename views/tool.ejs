@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("partials/head", { title: "Tools" + " • " + appName }) %>
+</head>
+<body data-has-result="<%= result ? 1 : 0 %>" data-has-error="<%= error ? 1 : 0 %>">
+
+    <%- include("partials/navbar", { homeHref: "/" }) %>
+
+  <main class="container section fade-in" style="max-width:980px;">
+    <div class="card card-pad">
+      <div class="split" style="justify-content:space-between; align-items:flex-start;">
+        <div>
+          <h1 class="h1" style="font-size:34px;"><%= tool.name %></h1>
+          <p class="sub"><%= tool.description %></p>
+          <div class="kbd" style="margin-top:10px;">Cost: <strong><%= tool.cost %></strong> credits / run</div>
+        </div>
+        <div class="status" style="margin-top:12px;">
+            <span>⚡</span>
+            <span>Runs cost <strong><%= tool.cost %></strong> credits. Usage is logged automatically.</span>
+        </div>
+
+        <a class="btn btn-ghost" href="/app">← Back</a>
+      </div>
+
+      <hr class="hr" />
+
+      <% if (error) { %>
+        <div class="error"><%= error %></div>
+      <% } %>
+
+      <form class="form js-tool-form" method="POST" action="/tools/<%= tool.key %>/run">
+        <div>
+            <div class="label">Input</div>
+
+            <textarea
+                class="textarea js-counted-textarea"
+                name="input"
+                rows="6"
+                maxlength="4000"
+                required
+            ><%= input || "" %></textarea>
+
+            <div class="small muted js-char-count">
+                0 / 4000 characters
+            </div>
+        </div>
+
+        <button class="btn btn-primary" type="submit">
+            <span class="btn-text">Run</span>
+        </button>
+
+      </form>
+
+      <% if (result) { %>
+        <div class="card-soft card-pad" style="margin-top:16px;">
+            <div class="split" style="align-items:center; justify-content:space-between;">
+            <div class="h2">Result</div>
+            <button
+                class="btn btn-ghost js-copy-result"
+                type="button"
+                data-copy-target="tool-result"
+            >
+                Copy
+            </button>
+            </div>
+
+            <pre id="tool-result" class="result-text"><%= result %></pre>
+        </div>
+    <% } %>
+
+    </div>
+  </main>
+</body>
+</html>
